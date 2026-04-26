@@ -211,7 +211,7 @@ async def load_plugins(folder, extfolder=None):
                     pluginname not in VPS_NOLOAD
                 ):
                     flag = True
-                    check = 0
+                    _retry_count = 0
                     while flag:
                         try:
                             load_module(
@@ -224,10 +224,10 @@ async def load_plugins(folder, extfolder=None):
                             break
                         except ModuleNotFoundError as e:
                             install_pip(e.name)
-                            check += 1
+                            _retry_count += 1
                             if shortname not in failure:
                                 failure.append(shortname)
-                            if check > 0:
+                            if _retry_count > 0:
                                 break
                 else:
                     os.remove(Path(f"{plugin_path}/{shortname}.py"))
